@@ -10,8 +10,7 @@ class Config(object):
     SECRET_KEY = os.urandom(24)
     COUNTRY_NAME = 'INDIA'
     COUNTRY_TIME_ZONE = 'Asia/Kolkata'
-    APP_REQUEST_AUTH_SECRET = "MySecretKeyForJwtToken"
-    JWT_ACCESS_TOKEN_EXPIRES = 5
     DATABASE_URL = os.environ.get('DATABASE_URL', default='postgresql://fulfilio:fulfilio@localhost:9011/fulfilio')
-    CLOUDAMQP_URL = os.environ.get('CLOUDAMQP_URL', default='amqp://ifhzzjcg:CwMA3k...@golden-kangaroo.rmq.cloudamqp'
-                                                            '.com/ifhzzjcg ')
+    CLOUDAMQP_URL = os.environ.get('CLOUDAMQP_URL', default='amqp://ilustyal:b_TXJKWzPsJhdVapHg73SjOo_1myefCq@rhino'
+                                                            '.rmq.cloudamqp.com/ilustyal')
+    CELERY_BACKEND = "db+" + DATABASE_URL

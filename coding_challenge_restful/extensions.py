@@ -4,6 +4,7 @@ import inflection
 from flask.config import Config
 from flask_migrate import Migrate
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy_wrapper import SQLAlchemy
 
@@ -50,13 +51,15 @@ class ProductStatus(Enum):
     INACTIVE = "inactive"
 
 
-class Products(Base, Model):
+class Product(Base, Model):
     name = Column(String(256), nullable=False)
     sku = Column(String(256), unique=True, nullable=False, index=True)
     description = Column(String(1024), nullable=False)
     status = Column(EnumChoiceType(ProductStatus, impl=String(128)), nullable=False, index=True)
 
-    @classmethod
-    def get_all_sku_records(cls, db):
-        record = db.query(cls).all()
-        return record
+
+class AsyncTask(Base, Model):
+    __tablename__ = 'async_task'
+
+    task_id = Column(String(64), index=True)
+    payload = Column(JSONB)

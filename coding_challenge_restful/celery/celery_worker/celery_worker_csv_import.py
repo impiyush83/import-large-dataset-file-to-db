@@ -1,12 +1,10 @@
 from coding_challenge_restful.celery.celery_app import celery_app
-from coding_challenge_restful.constants.common_constants import SUCCESS
+from coding_challenge_restful.celery.celery_base import task_initializer
+from coding_challenge_restful.celery.celery_base import CeleryBaseTask
 
 
-@celery_app.task(bind=True, name="task_csv_import")
+@celery_app.task(bind=True, base=CeleryBaseTask, name="task_csv_import")
+@task_initializer
 def task_csv_import(self, *args, **kwargs):
     """Background task that runs a long function"""
-
-    import pdb
-    pdb.set_trace()
-    return {"message": SUCCESS}
 

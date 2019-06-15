@@ -5,7 +5,7 @@ from coding_challenge_restful.core.import_csv import send_csv_import_task
 from coding_challenge_restful.utils.exceptions import exception_handle
 
 
-class SKU(Resource):
+class Products(Resource):
 
     decorators = [exception_handle]
 
@@ -15,21 +15,16 @@ class SKU(Resource):
     def post(self):
         """
 
-    .. http:post::  /skus
+    .. http:post::  /products
 
-        This api will be used to sku_data_import to queue
+        This api will be used to send sku_data_import task to queue
 
         **Example request**:
 
         .. sourcecode:: http
 
-           POST  /skus  HTTP/1.1 HEADERS
-           {
-                "title": "delivery 1",
-                "priority": "high/medium/low",
-                "created_at": "datetime",
-                "created_by": "1"
-           }
+           POST  /products  HTTP/1.1 HEADERS
+           File
 
         **Example response**:
 
@@ -43,15 +38,16 @@ class SKU(Resource):
            Vary: Accept
 
 
-        :statuscode 200: responses homepage
+        :statuscode 200: success
         :statuscode 400: bad request error
-        :statuscode 404: value error
-        :statuscode 401: unauthorized
 
         """
-        # returns a jwt token based on id
-        data = request.json
-        send_csv_import_task(data)
+        import pdb
+        pdb.set_trace()
+        products_file = request.files["products_csv"]
+        products_file_object = products_file.read()
+        products_file_object = products_file_object.decode('utf-8')
+        send_csv_import_task(products_file_object)
         return {"message": "SUCCESS"}, 200
 
 
