@@ -42,8 +42,6 @@ class Products(Resource):
         :statuscode 400: bad request error
 
         """
-        import pdb
-        pdb.set_trace()
         products_file = request.files["products_csv"]
         products_file_object = products_file.read()
         products_file_object = products_file_object.decode('utf-8')

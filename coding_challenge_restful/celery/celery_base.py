@@ -2,7 +2,7 @@ from functools import wraps
 
 import celery
 
-from coding_challenge_restful.extensions import db
+from coding_challenge_restful.extensions import db, AsyncTaskStatus, AsyncTask
 
 
 class CeleryBaseTask(celery.Task):
@@ -40,6 +40,7 @@ class CeleryBaseTask(celery.Task):
         Returns:
             None: The return value of this handler is ignored.
         """
+        self.async_task_obj.task_status = AsyncTaskStatus.EXCEPTION
         print("Failure")
         self.db.rollback()
 
@@ -67,6 +68,10 @@ def task_initializer(fn):
     @wraps(fn)
     def wrapper(self, *args, **kwargs):
         self.db = db
+        async_task_obj = self.db.query(AsyncTask).filter(
+            AsyncTask.id == kwargs.get("async_task_id")
+        ).first()
+        self.async_task_obj = async_task_obj
         print(fn.__name__)
-        return fn(self, *args, **kwargs)
+        return fn(self,   *args, payload=async_task_obj.payload, **kwargs)
     return wrapper
