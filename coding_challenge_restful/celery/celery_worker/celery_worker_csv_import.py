@@ -11,9 +11,9 @@ import csv
 def task_csv_import(self, *args, **kwargs):
     """Background task that runs a long function"""
 
-    file_id = self.async_task_obj.payload
+    file_id = self.async_task_obj.payload.get('id')
     csv_object = self.db.query(BulkCSVUpload).filter(BulkCSVUpload.id == file_id).first()
-    products_csv_object = csv_object.decode('utf-8')
+    products_csv_object = csv_object.csv.decode('utf-8')
     reader = csv.DictReader(
         products_csv_object.splitlines(),
         delimiter=','
@@ -30,5 +30,5 @@ def task_csv_import(self, *args, **kwargs):
         )
         pro_obj = ProductMethods.create_record(product_object)
         self.db.flush()
-    db.commit()
+    self.db.commit()
 
