@@ -1,6 +1,7 @@
 from functools import wraps
 
 import celery
+from depot.manager import DepotManager
 
 from coding_challenge_restful.extensions import db, AsyncTaskStatus, AsyncTask
 
@@ -73,5 +74,7 @@ def task_initializer(fn):
         ).first()
         self.async_task_obj = async_task_obj
         print(fn.__name__)
+        if not DepotManager._default_depot:
+            DepotManager.configure('default', {'depot.storage_path': './files'})
         return fn(self,   *args, payload=async_task_obj.payload, **kwargs)
     return wrapper

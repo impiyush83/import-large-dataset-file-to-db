@@ -31,3 +31,4 @@ def task_csv_import(self, *args, **kwargs):
         pro_obj = ProductMethods.create_record(product_object)
         self.db.flush()
     db.commit()
+
