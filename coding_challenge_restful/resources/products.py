@@ -1,3 +1,4 @@
+from depot.manager import DepotManager
 from flask import current_app as app, request
 from flask_restful import Resource
 
@@ -46,6 +47,10 @@ class Products(Resource):
         """
         products_file = request.files["products_csv"]
         products_file_object = products_file.read()
+        if not DepotManager._default_depot:
+            DepotManager.configure('default',  {'depot.storage_path': './files'})
+        import pdb
+        pdb.set_trace()
         bulk_csv_object = BulkCSVUploadMethods.create_record(dict(csv=products_file_object))
         db.commit()
         send_csv_import_task(bulk_csv_object.id)

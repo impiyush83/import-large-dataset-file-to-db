@@ -3,7 +3,7 @@ from functools import wraps
 import celery
 from depot.manager import DepotManager
 
-from coding_challenge_restful.extensions import db, AsyncTaskStatus, AsyncTask
+from coding_challenge_restful.extensions import db, AsyncTask
 
 
 class CeleryBaseTask(celery.Task):
@@ -41,7 +41,6 @@ class CeleryBaseTask(celery.Task):
         Returns:
             None: The return value of this handler is ignored.
         """
-        self.async_task_obj.task_status = AsyncTaskStatus.EXCEPTION
         print("Failure")
         self.db.rollback()
 

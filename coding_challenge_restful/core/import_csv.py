@@ -13,7 +13,7 @@ def send_csv_import_task(file_id):
     :return: None
     """
 
-    payload = dict(payload=file_id, task_id=str(uuid.uuid1()))
+    payload = dict(payload=dict(id=file_id), task_id=str(uuid.uuid1()))
 
     send_task_to_queue(
         payload=payload,

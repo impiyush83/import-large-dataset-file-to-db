@@ -2,14 +2,14 @@ from flask import current_app as app
 
 from coding_challenge_restful.celery.celery_app import celery_app
 from coding_challenge_restful.constants.common_constants import SUCCESS
-from coding_challenge_restful.extensions import db, AsyncTaskStatus
+from coding_challenge_restful.extensions import db
 from coding_challenge_restful.model_methods.async_task_methods import AsyncTaskMethods
 
 
 def send_task_to_queue(payload=None, task_name=None, queue_name=None, celery_application=celery_app):
     import pdb
     pdb.set_trace()
-    record_obj = AsyncTaskMethods.add_record(db, payload=payload)
+    record_obj = AsyncTaskMethods.create_record(payload)
     result = None
     message = SUCCESS
     try:
@@ -24,8 +24,7 @@ def send_task_to_queue(payload=None, task_name=None, queue_name=None, celery_app
         print("Error in celery sending tasks to rabbitmq")
         AsyncTaskMethods.update_record_with_id(
             db,
-            record_obj.id,
-            task_status=AsyncTaskStatus.EXCEPTION
+            record_obj.id
         )
     else:
         AsyncTaskMethods.update_record_with_id(

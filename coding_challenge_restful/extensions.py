@@ -58,12 +58,12 @@ class Product(Base, Model):
     status = Column(EnumChoiceType(ProductStatus, impl=String(128)), nullable=False, index=True)
 
 
-class AsyncTaskStatus(Enum):
-    PENDING = 'PENDING'
-    IN_PROGRESS = 'IN_PROGRESS'
-    WORKER_COMPLETE = 'WORKER_COMPLETE'
-    EXCEPTION = 'EXCEPTION'
-    DONE = 'DONE'
+# class AsyncTaskStatus(Enum):
+#     PENDING = 'PENDING'
+#     IN_PROGRESS = 'IN_PROGRESS'
+#     WORKER_COMPLETE = 'WORKER_COMPLETE'
+#     EXCEPTION = 'EXCEPTION'
+#     DONE = 'DONE'
 
 
 class AsyncTask(Base, Model):
@@ -71,11 +71,6 @@ class AsyncTask(Base, Model):
 
     task_id = Column(String(64), index=True)
     payload = Column(JSONB)
-    task_status = Column(
-        EnumChoiceType(AsyncTaskStatus, impl=String(64)),
-        default=AsyncTaskStatus.PENDING,
-        nullable=False, index=True
-    )
 
 
 class BulkCSVUpload(Base, Model):
