@@ -2,6 +2,8 @@ from flask import current_app as app, request
 from flask_restful import Resource
 
 from coding_challenge_restful.core.import_csv import send_csv_import_task
+from coding_challenge_restful.extensions import db
+from coding_challenge_restful.model_methods.bulk_csv_methods import BulkCSVUploadMethods
 from coding_challenge_restful.utils.exceptions import exception_handle
 
 
@@ -44,8 +46,9 @@ class Products(Resource):
         """
         products_file = request.files["products_csv"]
         products_file_object = products_file.read()
-        products_file_object = products_file_object.decode('utf-8')
-        send_csv_import_task(products_file_object)
+        bulk_csv_object = BulkCSVUploadMethods.create_record(dict(csv=products_file_object))
+        db.commit()
+        send_csv_import_task(bulk_csv_object.id)
         return {"message": "SUCCESS"}, 200
 
 

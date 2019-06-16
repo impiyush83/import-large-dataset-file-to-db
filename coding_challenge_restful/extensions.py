@@ -1,5 +1,5 @@
 from enum import Enum
-
+from depot.fields.sqlalchemy import UploadedFileField
 import inflection
 from flask.config import Config
 from flask_migrate import Migrate
@@ -76,3 +76,9 @@ class AsyncTask(Base, Model):
         default=AsyncTaskStatus.PENDING,
         nullable=False, index=True
     )
+
+
+class BulkCSVUpload(Base, Model):
+    __tablename__ = 'bulk_csv_upload'
+
+    csv = Column(UploadedFileField(), nullable=False)

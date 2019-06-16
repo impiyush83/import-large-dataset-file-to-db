@@ -2,7 +2,7 @@ from coding_challenge_restful.celery.celery_app import celery_app
 from coding_challenge_restful.celery.celery_base import task_initializer
 from coding_challenge_restful.celery.celery_base import CeleryBaseTask
 from coding_challenge_restful.model_methods.product_methods import ProductMethods
-from coding_challenge_restful.extensions import ProductStatus
+from coding_challenge_restful.extensions import ProductStatus, BulkCSVUpload
 import csv
 
 
@@ -11,9 +11,11 @@ import csv
 def task_csv_import(self, *args, **kwargs):
     """Background task that runs a long function"""
 
-    file_content = self.async_task_obj.payload.get('file_contents')
+    file_id = self.async_task_obj.payload
+    csv_object = self.db.query(BulkCSVUpload).filter(BulkCSVUpload.id == file_id).first()
+    products_csv_object = csv_object.decode('utf-8')
     reader = csv.DictReader(
-        file_content.splitlines(),
+        products_csv_object.splitlines(),
         delimiter=','
     )
 
@@ -27,4 +29,5 @@ def task_csv_import(self, *args, **kwargs):
             status=ProductStatus.ACTIVE
         )
         pro_obj = ProductMethods.create_record(product_object)
+        self.db.flush()
     db.commit()

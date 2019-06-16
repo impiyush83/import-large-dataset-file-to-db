@@ -7,6 +7,8 @@ from coding_challenge_restful.model_methods.async_task_methods import AsyncTaskM
 
 
 def send_task_to_queue(payload=None, task_name=None, queue_name=None, celery_application=celery_app):
+    import pdb
+    pdb.set_trace()
     record_obj = AsyncTaskMethods.add_record(db, payload=payload)
     result = None
     message = SUCCESS
