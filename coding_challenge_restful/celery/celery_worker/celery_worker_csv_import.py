@@ -13,7 +13,9 @@ def task_csv_import(self, *args, **kwargs):
 
     file_id = self.async_task_obj.payload.get('id')
     csv_object = self.db.query(BulkCSVUpload).filter(BulkCSVUpload.id == file_id).first()
-    products_csv_object = csv_object.csv.decode('utf-8')
+    path_id = csv_object.csv.file_id
+    content = open('./files/{path_id}/file'.format(path_id=path_id), 'rb')
+    products_csv_object = content.read().decode('utf-8')
     reader = csv.DictReader(
         products_csv_object.splitlines(),
         delimiter=','
@@ -29,6 +31,5 @@ def task_csv_import(self, *args, **kwargs):
             status=ProductStatus.ACTIVE
         )
         pro_obj = ProductMethods.create_record(product_object)
-        self.db.flush()
     self.db.commit()
 

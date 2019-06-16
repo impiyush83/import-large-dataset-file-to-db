@@ -1,18 +1,18 @@
-"""Added product and aysnc table
+"""All models migration file
 
-Revision ID: 8ce69fc617d6
+Revision ID: a7c7fe6c0b87
 Revises: 
-Create Date: 2019-06-16 03:46:14.627415
+Create Date: 2019-06-16 07:16:25.568017
 
 """
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
-
+import depot
 # revision identifiers, used by Alembic.
 import sa_types
 
-revision = '8ce69fc617d6'
+revision = 'a7c7fe6c0b87'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,12 +27,17 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_async_task_task_id'), 'async_task', ['task_id'], unique=False)
+    op.create_table('bulk_csv_upload',
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('csv', depot.fields.sqlalchemy.UploadedFileField(), nullable=False),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('product',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('name', sa.String(length=256), nullable=False),
     sa.Column('sku', sa.String(length=256), nullable=False),
     sa.Column('description', sa.String(length=1024), nullable=False),
-    sa.Column('status', sa_types.Integer(), nullable=False),
+    sa.Column('status', sa.String(64), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_product_sku'), 'product', ['sku'], unique=True)
@@ -45,6 +50,7 @@ def downgrade():
     op.drop_index(op.f('ix_product_status'), table_name='product')
     op.drop_index(op.f('ix_product_sku'), table_name='product')
     op.drop_table('product')
+    op.drop_table('bulk_csv_upload')
     op.drop_index(op.f('ix_async_task_task_id'), table_name='async_task')
     op.drop_table('async_task')
     # ### end Alembic commands ###
