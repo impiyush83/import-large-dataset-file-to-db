@@ -1,0 +1,32 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="container" style="align:center;">
+    <h2 style="padding-left: 330px">Hi <b><i>ACME</i></b>, upload your products csv !!!</h2>
+</div>
+
+<div class="container" style="padding: 300px">
+	<form id="fileUploadForm" action="/products" method="post"
+      enctype="multipart/form-data">
+    <fieldset>
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="row">
+                <label class="control-label col-md-2 text-right" for="filename"><span>File</span></label>
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <input type="hidden" id="filename" name="filename" value="products_csv">
+                        <input type="file" id="products_csv" name="products_csv" class="form-control form-control-sm" accept=".csv">
+                        <div class="input-group-btn">
+                            <input type="submit"  value="Upload" class="rounded-0 btn btn-primary">
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>
+</div>

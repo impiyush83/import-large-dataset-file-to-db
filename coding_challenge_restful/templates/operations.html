@@ -1,0 +1,153 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+<div class="container" style="align:center;">
+    <h2 style="padding-left: 270px">Hi <b><i>ACME</i></b>, search and retrive your products !!!</h2>
+</div>
+
+<div class="container" style=" padding-left: 100px;">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-10">
+                        <input style="color: green;" type="button" id="go_back" value="GO BACK" class="form-control form-control-sm">
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+<div class="container" style=" padding-left: 100px;">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-10">
+                        <input style="color: red;" type="button" id="delete_products" value="DELETE ALL PRODUCTS"  class="form-control form-control-sm">
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+<div class="container" style="padding-left: 100px;">
+	<form id="fileUploadForm" action="/products" method="post"
+      enctype="multipart/form-data">
+    <fieldset>
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h7>SKU NAME </h7>
+                        <div class="input-group">
+                            <input type="search" id="sku" name="sku" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+                 <div class="row">
+                    <div class="col-md-10">
+                        <h7>DESCRIPTION </h7>
+                        <div class="input-group">
+                            <input type="search" id="description" name="description" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+                 <div class="row">
+                    <div class="col-md-10">
+                         <h7>PRODUCT NAME :</h7>
+                        <div class="input-group">
+                            <input type="search" id="name" name="name" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+                 <div class="row">
+                    <div class="col-md-10">
+                        <h7>STATUS (i.e option1 : active / option 2 inactive) </h7>
+                        <div class="input-group">
+                            <input type="search" id="status" name="status" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>
+</div>
+
+<div class="container" style=" padding-left: 100px;">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-10">
+                        <input style="color: blue;" type="button" id="fetch_products" value="RETRIVE PAGINATED DATA ON SEARCH CRITERION" class="form-control form-control-sm">
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+
+
+
+
+
+
+<script>
+
+        $(document).ready(function (e) {
+            $('#delete_products').on('click', (function (e) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: "products",
+                    datatype: 'json',
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    processData: false,
+                    success: function (data) {
+                        window.location.href='/';
+                    },
+                    error: function (data) {
+                        alert("ERROR " + data.status + " " + data.statusText + " : "+data.responseJSON.message);
+                        location.reload();
+                    }
+                });
+            }));
+
+            $('#go_back').click(function() {
+                window.location.href='/';
+            });
+
+            $('#fetch_products').on('click', (function (e) {
+                var object = {};
+                var name =  $('#name').value;
+                if name != "" {
+                    object["name"] = name;
+                }
+                var designation = $('#name').value;
+                if designation != "" {
+                    object["designation"] = designation;
+                }
+                var status = $('#name').value;
+                if status != "" {
+                    object["status"] = status;
+                }
+                var sku = $('#name').value;
+                if sku != "" {
+                    object["sku"] = sku;
+                }
+                console.log(object);
+                $.ajax({
+                    type: 'GET',
+                    url: "products",
+                    data: object,
+                    datatype: 'json',
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    processData: false
+                });
+            }));
+        });
+
+
+
+</script>

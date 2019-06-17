@@ -1,5 +1,5 @@
 from depot.manager import DepotManager
-from flask import current_app as app, request
+from flask import current_app as app, request, make_response, render_template
 from flask_restful import Resource
 
 from coding_challenge_restful.constants.common_constants import SUCCESS
@@ -54,7 +54,7 @@ class Products(Resource):
         db.commit()
         send_csv_import_task(bulk_csv_object.id)
         db.commit()
-        return {"message": SUCCESS}, 200
+        return make_response(render_template('operations.html'), 200)
 
     def delete(self):
         """
@@ -87,7 +87,7 @@ class Products(Resource):
         """
         ProductMethods.delete_all_records(db)
         db.commit()
-        return {"message": SUCCESS}, 200
+        return make_response(render_template('operations.html'), 200)
 
     def get(self):
         """
@@ -118,5 +118,9 @@ class Products(Resource):
         :statuscode 400: bad request error
 
         """
-
-        return {"message": SUCCESS}, 200
+        list_of_products = []
+        all_products = ProductMethods.get_all_records(db)
+        for product in all_products:
+            product_list = [product.name, product.sku, product.description, product.status.value]
+            list_of_products.append(product_list)
+        return {"products": list_of_products}, 200
