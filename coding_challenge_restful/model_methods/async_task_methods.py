@@ -6,8 +6,8 @@ class AsyncTaskMethods(BaseModel):
     model = AsyncTask
 
     @staticmethod
-    def update_record_with_id(db, id, **kwargs):
-        db.query(AsyncTask).filter(AsyncTask.id == id).update(kwargs)
+    def update_record_with_id(db, async_task_id, **kwargs):
+        db.query(AsyncTask).filter(AsyncTask.id == async_task_id).update(kwargs)
         db.flush()
 
     @staticmethod

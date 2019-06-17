@@ -23,13 +23,31 @@ def task_csv_import(self, *args, **kwargs):
 
     reader.fieldnames = [header.strip().lower() for header in reader.fieldnames]
 
+    cnt = 0
     for product in reader:
+        cnt += 1
+        if not product.get('sku'):
+            continue
+        sku = product.get('sku').lower()  # as sku is case-insensitive
         product_object = dict(
             name=product.get('name'),
-            sku=product.get('sku'),
+            sku=sku,
             description=product.get('description'),
-            status=ProductStatus.ACTIVE
+            status=ProductStatus.ACTIVE if cnt % 2 == 1 else ProductStatus.INACTIVE
         )
-        pro_obj = ProductMethods.create_record(product_object)
-    self.db.commit()
 
+        record = ProductMethods.get_record_with_sku(self.db, sku)
+        if not record:
+            try:
+                pro_obj = ProductMethods.create_record(product_object)
+            except Exception as e:
+                continue
+        else:
+            # update record or overwrite data
+            updated_data = dict(
+                name=product.get('name'),
+                description=product.get('description'),
+                status=ProductStatus.ACTIVE if cnt % 2 == 1 else ProductStatus.INACTIVE
+            )
+            ProductMethods.update_record(self.db, sku, updated_data)
+    self.db.commit()
