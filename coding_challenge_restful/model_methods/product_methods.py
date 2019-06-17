@@ -20,4 +20,5 @@ class ProductMethods(BaseModel):
 
     @classmethod
     def update_record(cls, db, sku, updated_data):
-        db.query(cls.model).filter().update()
+        db.query(cls.model).filter().update(updated_data)
+        db.flush()

@@ -40,7 +40,9 @@ def task_csv_import(self, *args, **kwargs):
         if not record:
             try:
                 pro_obj = ProductMethods.create_record(product_object)
+                self.db.commit()
             except Exception as e:
+                self.db.rollback()
                 continue
         else:
             # update record or overwrite data
@@ -50,4 +52,4 @@ def task_csv_import(self, *args, **kwargs):
                 status=ProductStatus.ACTIVE if cnt % 2 == 1 else ProductStatus.INACTIVE
             )
             ProductMethods.update_record(self.db, sku, updated_data)
-    self.db.commit()
+            self.db.commit()
