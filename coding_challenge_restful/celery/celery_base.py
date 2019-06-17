@@ -58,7 +58,7 @@ class CeleryBaseTask(celery.Task):
         Returns:
             None: The return value of this handler is ignored.
         """
-        print("Success")
+        print("After return success")
         self.db.session.remove()
 
 

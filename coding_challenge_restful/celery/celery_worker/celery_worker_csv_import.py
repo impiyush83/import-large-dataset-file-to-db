@@ -38,6 +38,7 @@ def task_csv_import(self, *args, **kwargs):
 
         record = ProductMethods.get_record_with_sku(self.db, sku)
         if not record:
+            print("New record creation")
             try:
                 pro_obj = ProductMethods.create_record(product_object)
                 self.db.commit()
@@ -46,6 +47,7 @@ def task_csv_import(self, *args, **kwargs):
                 continue
         else:
             # update record or overwrite data
+            print("Overwrite")
             updated_data = dict(
                 name=product.get('name'),
                 description=product.get('description'),
