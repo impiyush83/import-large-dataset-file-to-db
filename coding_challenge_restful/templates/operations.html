@@ -31,73 +31,6 @@
 </div>
 
 
-<!--<div class="container" style="padding-left: 100px;">-->
-    <!--<form id="fetch_products">-->
-    <!--<div class="form-horizontal">-->
-        <!--<div class="form-group">-->
-                <!--<div class="row">-->
-                    <!--<div class="col-md-10">-->
-                        <!--<h7>PAGE NO:  </h7>-->
-                        <!--<div class="input-group">-->
-                            <!--<input type="text" id="page" name="page" value="1" class="form-control form-control-sm" disabled>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="row">-->
-                    <!--<div class="col-md-10">-->
-                        <!--<h7>SKU NAME </h7>-->
-                        <!--<div class="input-group">-->
-                            <!--<input type="text" id="sku" name="sku" class="form-control form-control-sm">-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                 <!--<div class="row">-->
-                    <!--<div class="col-md-10">-->
-                        <!--<h7>DESCRIPTION </h7>-->
-                        <!--<div class="input-group">-->
-                            <!--<input type="text" id="description" name="description" class="form-control form-control-sm">-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                 <!--<div class="row">-->
-                    <!--<div class="col-md-10">-->
-                         <!--<h7>PRODUCT NAME :</h7>-->
-                        <!--<div class="input-group">-->
-                            <!--<input type="text" id="name" name="name" class="form-control form-control-sm">-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                 <!--<div class="row">-->
-                    <!--<div class="col-md-10">-->
-                        <!--<h7>STATUS (i.e option1 : active / option 2 inactive) </h7>-->
-                        <!--<div class="input-group">-->
-                            <!--<input type="text" id="status" name="status" class="form-control form-control-sm">-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--</br>-->
-                <!--<div class="row">-->
-                    <!--<div class="col-md-10">-->
-                        <!--<input style="color: blue;" type="submit" value="RETRIVE PAGINATED DATA ON SEARCH CRITERION" class="form-control form-control-sm">-->
-                    <!--</div>-->
-                <!--</div>-->
-
-                <!--<div class="row" hidden>-->
-                    <!--<div class="col-md-10">-->
-                        <!--<input style="color: blue;" type="submit" value="Next page" class="form-control form-control-sm">-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-    <!--</div>-->
-      <!--</form>-->
-<!--</div>-->
-
-
-
-
-
-
-
 
 <script>
 
@@ -123,52 +56,6 @@
             $('#go_back').click(function() {
                 window.location.href='/';
             });
-
-            <!--$('#fetch_products').on('click', (function (e) {-->
-                <!--var query = "";-->
-                <!--var name =  $('#name').val();-->
-                <!--if (name != "")-->
-                <!--{-->
-                    <!--query = query + "name=" + name;-->
-                <!--}-->
-                <!--var description = $('#description').val();-->
-                <!--if (description != "")-->
-                <!--{-->
-                    <!--query = query + "&description=" + description;-->
-                <!--}-->
-                <!--var status = $('#status').val();-->
-                <!--if (status != "")-->
-                <!--{-->
-                <!--query = query + "&status=" + status;-->
-                <!--}-->
-                <!--var page = $('#page').val();-->
-                <!--if (page != "")-->
-                <!--{-->
-                    <!--query = query + "&page=" + page;-->
-                <!--}-->
-                <!--var sku = $('#sku').val();-->
-                <!--if (sku != "")-->
-                <!--{-->
-                     <!--query = query + "&sku=" + sku;-->
-                <!--}-->
-                <!--alert(query);-->
-                <!--$.ajax({-->
-                    <!--type: 'GET',-->
-                    <!--url: "products",-->
-                    <!--data: query,-->
-                    <!--datatype: 'json',-->
-                    <!--cache: false,-->
-                    <!--contentType: "application/json; charset=utf-8",-->
-                    <!--processData: false,-->
-                    <!--success: function (data) {-->
-                        <!--alert("Success");-->
-                    <!--},-->
-                    <!--error: function (data) {-->
-                        <!--alert("ERROR " + data.status + " " + data.statusText + " : "+data.responseJSON.message);-->
-                        <!--location.reload();-->
-                    <!--}-->
-                <!--});-->
-            <!--}));-->
-        <!--});-->
+        });
 
 </script>
