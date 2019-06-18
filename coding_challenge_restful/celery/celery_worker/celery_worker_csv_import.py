@@ -4,6 +4,7 @@ from coding_challenge_restful.celery.celery_base import CeleryBaseTask
 from coding_challenge_restful.model_methods.product_methods import ProductMethods
 from coding_challenge_restful.extensions import ProductStatus, BulkCSVUpload
 import csv
+import os
 
 
 @celery_app.task(bind=True, base=CeleryBaseTask, name="task_csv_import")
@@ -15,7 +16,7 @@ def task_csv_import(self, *args, **kwargs):
     csv_object = self.db.query(BulkCSVUpload).filter(BulkCSVUpload.id == file_id).first()
     path_id = csv_object.csv.file_id
     abs_path = os.path.abspath('files')
-    content = open(abs_path+'/{path_id}/file'.format(path_id=path_id), 'rb')
+    content = open(abs_path + '/{path_id}/file'.format(path_id=path_id), 'rb')
     products_csv_object = content.read().decode('utf-8')
     reader = csv.DictReader(
         products_csv_object.splitlines(),
