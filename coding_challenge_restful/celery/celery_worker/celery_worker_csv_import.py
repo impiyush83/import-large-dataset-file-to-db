@@ -14,7 +14,8 @@ def task_csv_import(self, *args, **kwargs):
     file_id = self.async_task_obj.payload.get('id')
     csv_object = self.db.query(BulkCSVUpload).filter(BulkCSVUpload.id == file_id).first()
     path_id = csv_object.csv.file_id
-    content = open('./files/{path_id}/file'.format(path_id=path_id), 'rb')
+    abs_path = os.path.abspath('files')
+    content = open(abs_path+'/{path_id}/file'.format(path_id=path_id), 'rb')
     products_csv_object = content.read().decode('utf-8')
     reader = csv.DictReader(
         products_csv_object.splitlines(),
