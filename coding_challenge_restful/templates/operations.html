@@ -30,17 +30,24 @@
         </div>
 </div>
 
+
 <div class="container" style="padding-left: 100px;">
-	<form id="fileUploadForm" action="/products" method="post"
-      enctype="multipart/form-data">
-    <fieldset>
-        <div class="form-horizontal">
-            <div class="form-group">
+    <form id="fetch_products">
+    <div class="form-horizontal">
+        <div class="form-group">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h7>PAGE NO:  </h7>
+                        <div class="input-group">
+                            <input type="text" id="page" name="page" value="1" class="form-control form-control-sm" disabled>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-10">
                         <h7>SKU NAME </h7>
                         <div class="input-group">
-                            <input type="search" id="sku" name="sku" class="form-control form-control-sm">
+                            <input type="text" id="sku" name="sku" class="form-control form-control-sm">
                         </div>
                     </div>
                 </div>
@@ -48,7 +55,7 @@
                     <div class="col-md-10">
                         <h7>DESCRIPTION </h7>
                         <div class="input-group">
-                            <input type="search" id="description" name="description" class="form-control form-control-sm">
+                            <input type="text" id="description" name="description" class="form-control form-control-sm">
                         </div>
                     </div>
                 </div>
@@ -56,7 +63,7 @@
                     <div class="col-md-10">
                          <h7>PRODUCT NAME :</h7>
                         <div class="input-group">
-                            <input type="search" id="name" name="name" class="form-control form-control-sm">
+                            <input type="text" id="name" name="name" class="form-control form-control-sm">
                         </div>
                     </div>
                 </div>
@@ -64,27 +71,27 @@
                     <div class="col-md-10">
                         <h7>STATUS (i.e option1 : active / option 2 inactive) </h7>
                         <div class="input-group">
-                            <input type="search" id="status" name="status" class="form-control form-control-sm">
+                            <input type="text" id="status" name="status" class="form-control form-control-sm">
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </fieldset>
-</form>
-</div>
-
-<div class="container" style=" padding-left: 100px;">
-        <div class="form-horizontal">
-            <div class="form-group">
+                </br>
                 <div class="row">
                     <div class="col-md-10">
-                        <input style="color: blue;" type="button" id="fetch_products" value="RETRIVE PAGINATED DATA ON SEARCH CRITERION" class="form-control form-control-sm">
+                        <input style="color: blue;" type="submit" value="RETRIVE PAGINATED DATA ON SEARCH CRITERION" class="form-control form-control-sm">
+                    </div>
+                </div>
+
+                <div class="row" hidden>
+                    <div class="col-md-10">
+                        <input style="color: blue;" type="submit" value="Next page" class="form-control form-control-sm">
                     </div>
                 </div>
             </div>
-        </div>
+    </div>
+      </form>
 </div>
+
 
 
 
@@ -118,36 +125,50 @@
             });
 
             $('#fetch_products').on('click', (function (e) {
-                var object = {};
-                var name =  $('#name').value;
-                if name != "" {
-                    object["name"] = name;
+                var query = "";
+                var name =  $('#name').val();
+                if (name != "")
+                {
+                    query = query + "name=" + name;
                 }
-                var designation = $('#name').value;
-                if designation != "" {
-                    object["designation"] = designation;
+                var description = $('#description').val();
+                if (description != "")
+                {
+                    query = query + "&description=" + description;
                 }
-                var status = $('#name').value;
-                if status != "" {
-                    object["status"] = status;
+                var status = $('#status').val();
+                if (status != "")
+                {
+                query = query + "&status=" + status;
                 }
-                var sku = $('#name').value;
-                if sku != "" {
-                    object["sku"] = sku;
+                var page = $('#page').val();
+                if (page != "")
+                {
+                    query = query + "&page=" + page;
                 }
-                console.log(object);
+                var sku = $('#sku').val();
+                if (sku != "")
+                {
+                     query = query + "&sku=" + sku;
+                }
+                alert(query);
                 $.ajax({
                     type: 'GET',
                     url: "products",
-                    data: object,
+                    data: query,
                     datatype: 'json',
                     cache: false,
                     contentType: "application/json; charset=utf-8",
-                    processData: false
+                    processData: false,
+                    success: function (data) {
+                        alert("Success");
+                    },
+                    error: function (data) {
+                        alert("ERROR " + data.status + " " + data.statusText + " : "+data.responseJSON.message);
+                        location.reload();
+                    }
                 });
             }));
         });
-
-
 
 </script>

@@ -1,8 +1,10 @@
 from depot.manager import DepotManager
 from flask import current_app as app, request, make_response, render_template
 from flask_restful import Resource
+from werkzeug.exceptions import BadRequest
 
 from coding_challenge_restful.constants.common_constants import SUCCESS
+from coding_challenge_restful.core.filter_params_pagination import create_filter_params
 from coding_challenge_restful.core.import_csv import send_csv_import_task
 from coding_challenge_restful.extensions import db
 from coding_challenge_restful.model_methods.bulk_csv_methods import BulkCSVUploadMethods
@@ -100,7 +102,8 @@ class Products(Resource):
 
         .. sourcecode:: http
 
-           GET  /products  HTTP/1.1
+           GET  /products?page=1&name="name"&sku="sku"&description="desc"&status="active/inactive"  HTTP/1.1
+           page is mandatory
 
         **Example response**:
 
@@ -119,8 +122,23 @@ class Products(Resource):
 
         """
         list_of_products = []
-        all_products = ProductMethods.get_all_records(db)
+        params = request.args
+        sku = params.get("sku")
+        page = int(params.get('page'))
+        status = params.get("status")
+        description = params.get("description")
+        name = params.get('name')
+        filter_params = dict()
+        filter_params = create_filter_params(sku, description, name, status, filter_params)
+        if not page:
+            raise BadRequest("No page number")
+        all_products = ProductMethods.get_all_records_paginated(db, page, filter_params)
         for product in all_products:
-            product_list = [product.name, product.sku, product.description, product.status.value]
-            list_of_products.append(product_list)
-        return {"products": list_of_products}, 200
+            product_dict = dict(
+                name=product.name,
+                sku=product.sku,
+                description=product.description,
+                status=product.status.value
+            )
+            list_of_products.append(product_dict)
+        return {"products": dict(page=page, items=list_of_products)}, 200
