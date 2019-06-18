@@ -74,6 +74,6 @@ def task_initializer(fn):
         self.async_task_obj = async_task_obj
         print(fn.__name__)
         if not DepotManager._default_depot:
-            DepotManager.configure('default', {'depot.storage_path': './files'})
+            DepotManager.configure('default', {'depot.storage_path': '/files'})
         return fn(self,   *args, payload=async_task_obj.payload, **kwargs)
     return wrapper
