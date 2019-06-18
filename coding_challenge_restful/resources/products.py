@@ -101,7 +101,7 @@ class Products(Resource):
 
         .. sourcecode:: http
 
-           GET  /products?page=1&name="name"&sku="sku"&description="desc"&status="active/inactive"  HTTP/1.1
+           GET  /products?page="1"&name="name"&sku="sku"&description="desc"&status="active/inactive"  HTTP/1.1
            page is mandatory
 
         **Example response**:
