@@ -123,7 +123,7 @@ class Products(Resource):
         list_of_products = []
         params = request.args
         sku = params.get("sku")
-        page = int(params.get('page'))
+        page = params.get('page')
         status = params.get("status")
         description = params.get("description")
         name = params.get('name')
@@ -131,7 +131,8 @@ class Products(Resource):
         filter_params = create_filter_params(sku, description, name, status, filter_params)
         if not page:
             raise BadRequest("No page number")
-        all_products = ProductMethods.get_all_records_paginated(db, page, filter_params)
+        page = int(params.get('page'))
+        all_products = ProductMethods.get_all_records_paginated(db, filter_params, page=page)
         for product in all_products:
             product_dict = dict(
                 name=product.name,

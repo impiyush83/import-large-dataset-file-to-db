@@ -20,7 +20,7 @@ class ProductMethods(BaseModel):
         db.flush()
 
     @classmethod
-    def get_all_records_paginated(cls, db, page, filters):
+    def get_all_records_paginated(cls, db, filters, page=1):
         limit = 25
         offset = (page - 1) * 25
         query = db.query(cls.model)
