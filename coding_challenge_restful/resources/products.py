@@ -3,7 +3,6 @@ from flask import current_app as app, request, make_response, render_template
 from flask_restful import Resource
 from werkzeug.exceptions import BadRequest
 
-from coding_challenge_restful.constants.common_constants import SUCCESS
 from coding_challenge_restful.core.filter_params_pagination import create_filter_params
 from coding_challenge_restful.core.import_csv import send_csv_import_task
 from coding_challenge_restful.extensions import db
