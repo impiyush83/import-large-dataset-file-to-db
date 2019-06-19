@@ -1,22 +1,23 @@
 import csv
+
+from flask import Config
+
 from coding_challenge_restful.celery.celery_app import celery_app
 from coding_challenge_restful.celery.celery_base import CeleryBaseTask
 from coding_challenge_restful.celery.celery_base import task_initializer
-from coding_challenge_restful.core.s3 import get_file_from_s3
-from coding_challenge_restful.extensions import BulkCSVUpload, ProductStatus
+from coding_challenge_restful.extensions import ProductStatus
 from coding_challenge_restful.model_methods.product_methods import ProductMethods
+
+config_name = 'coding_challenge_restful.settings.Config'
+config = Config("")
+config.from_object(config_name)
 
 
 @celery_app.task(bind=True, base=CeleryBaseTask, name="task_csv_import")
 @task_initializer
-def task_csv_import(self, *args, **kwargs):
+def task_csv_import(self, *args, payload=None, **kwargs):
     """Background task that runs a long function"""
-    file_id = self.async_task_obj.payload.get('id')
-    csv_object = self.db.query(BulkCSVUpload).filter(BulkCSVUpload.id == file_id).first()
-    file_key = csv_object.csv.file_id
-    bucket_name = "fulfilio-files"
-    obj = get_file_from_s3(bucket_name, file_key)
-    products_csv_object_encoded = obj['Body'].read()
+    products_csv_object_encoded = self.obj['Body'].read()
     products_csv_object = products_csv_object_encoded.decode('utf-8')
     reader = csv.DictReader(
         products_csv_object.splitlines(),

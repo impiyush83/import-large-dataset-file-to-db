@@ -5,7 +5,8 @@ import celery
 from depot.manager import DepotManager
 from flask import Config
 
-from coding_challenge_restful.extensions import db, AsyncTask, s3_client
+from coding_challenge_restful.core.s3 import get_file_from_s3
+from coding_challenge_restful.extensions import db, AsyncTask, s3_client, BulkCSVUpload
 
 config_name = 'coding_challenge_restful.settings.Config'
 config = Config("")
@@ -78,6 +79,11 @@ def task_initializer(fn):
             AsyncTask.id == kwargs.get("async_task_id")
         ).first()
         self.async_task_obj = async_task_obj
+        self.file_id = self.async_task_obj.payload.get('id')
+        self.csv_object = self.db.query(BulkCSVUpload).filter(BulkCSVUpload.id == self.file_id).first()
+        self.file_key = self.csv_object.csv.file_id
+        self.bucket_name = "fulfilio-files"
+        self.obj = get_file_from_s3(self.bucket_name, self.file_key)
         print(fn.__name__)
         if not DepotManager._default_depot:
             DepotManager.configure('default', {
@@ -86,8 +92,8 @@ def task_initializer(fn):
                 'depot.secret_access_key': config.get('AWS_SECRET_KEY', None),
                 'depot.bucket': 'fulfilio-files',
                 'depot.region_name': 'eu-central-1'
-            }
-                                   )
+                }
+            )
         return fn(self, *args, payload=async_task_obj.payload, **kwargs)
 
     return wrapper
