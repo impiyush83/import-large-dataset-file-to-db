@@ -2,6 +2,7 @@ import csv
 from coding_challenge_restful.celery.celery_app import celery_app
 from coding_challenge_restful.celery.celery_base import CeleryBaseTask
 from coding_challenge_restful.celery.celery_base import task_initializer
+from coding_challenge_restful.core.s3 import get_file_from_s3
 from coding_challenge_restful.extensions import BulkCSVUpload, ProductStatus
 from coding_challenge_restful.model_methods.product_methods import ProductMethods
 
@@ -14,7 +15,7 @@ def task_csv_import(self, *args, **kwargs):
     csv_object = self.db.query(BulkCSVUpload).filter(BulkCSVUpload.id == file_id).first()
     file_key = csv_object.csv.file_id
     bucket_name = "fulfilio-files"
-    obj = self.s3_client.get_object(Bucket=bucket_name, Key=file_key)
+    obj = get_file_from_s3(bucket_name, file_key)
     products_csv_object_encoded = obj['Body'].read()
     products_csv_object = products_csv_object_encoded.decode('utf-8')
     reader = csv.DictReader(

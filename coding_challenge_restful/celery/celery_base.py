@@ -77,7 +77,6 @@ def task_initializer(fn):
         async_task_obj = self.db.query(AsyncTask).filter(
             AsyncTask.id == kwargs.get("async_task_id")
         ).first()
-        self.s3_client = s3_client
         self.async_task_obj = async_task_obj
         print(fn.__name__)
         if not DepotManager._default_depot:
