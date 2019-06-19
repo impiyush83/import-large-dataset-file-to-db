@@ -1,5 +1,3 @@
-import os
-
 from depot.manager import DepotManager
 from flask import current_app as app, request, make_response, render_template, config, Config
 from flask_restful import Resource
@@ -66,9 +64,9 @@ class Products(Resource):
                     'depot.region_name': 'eu-central-1'
                 }
             )
-        bulk_csv_object = BulkCSVUploadMethods.create_record(dict(csv=products_file_object))
+        csv_object = BulkCSVUploadMethods.create_record(dict(csv=products_file_object))
         db.commit()
-        send_csv_import_task(bulk_csv_object.id)
+        send_csv_import_task(csv_object.id)
         db.commit()
         return make_response(render_template('operations.html'), 200)
 
@@ -137,7 +135,7 @@ class Products(Resource):
         """
         list_of_products = []
         params = request.args
-        sku = params.get("sku")
+        sku = params.get('sku')
         page = params.get('page')
         status = params.get("status")
         description = params.get("description")

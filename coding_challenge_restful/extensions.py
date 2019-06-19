@@ -1,5 +1,6 @@
 from enum import Enum
 
+import boto3
 from boto.s3.connection import S3Connection
 from depot.fields.sqlalchemy import UploadedFileField
 import inflection
@@ -15,6 +16,13 @@ from sa_types import EnumChoiceType
 config_name = 'coding_challenge_restful.settings.Config'
 config = Config('')
 config.from_object(config_name)
+
+s3_client = boto3.client(
+            's3',
+            # Hard coded strings as credentials, not recommended.
+            aws_access_key_id=config['AWS_ACCESS_KEY'],
+            aws_secret_access_key=config['AWS_SECRET_KEY']
+)
 
 isolation_level = 'READ COMMITTED'
 db = SQLAlchemy(

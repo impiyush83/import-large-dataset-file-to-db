@@ -5,7 +5,7 @@ import celery
 from depot.manager import DepotManager
 from flask import Config
 
-from coding_challenge_restful.extensions import db, AsyncTask
+from coding_challenge_restful.extensions import db, AsyncTask, s3_client
 
 config_name = 'coding_challenge_restful.settings.Config'
 config = Config("")
@@ -77,6 +77,7 @@ def task_initializer(fn):
         async_task_obj = self.db.query(AsyncTask).filter(
             AsyncTask.id == kwargs.get("async_task_id")
         ).first()
+        self.s3_client = s3_client
         self.async_task_obj = async_task_obj
         print(fn.__name__)
         if not DepotManager._default_depot:
