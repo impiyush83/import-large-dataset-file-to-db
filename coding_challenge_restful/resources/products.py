@@ -1,5 +1,7 @@
+import os
+
 from depot.manager import DepotManager
-from flask import current_app as app, request, make_response, render_template
+from flask import current_app as app, request, make_response, render_template, config, Config
 from flask_restful import Resource
 from werkzeug.exceptions import BadRequest
 
@@ -9,6 +11,10 @@ from coding_challenge_restful.extensions import db
 from coding_challenge_restful.model_methods.bulk_csv_methods import BulkCSVUploadMethods
 from coding_challenge_restful.model_methods.product_methods import ProductMethods
 from coding_challenge_restful.utils.exceptions import exception_handle
+
+config_name = 'coding_challenge_restful.settings.Config'
+config = Config("")
+config.from_object(config_name)
 
 
 class Products(Resource):
@@ -50,7 +56,16 @@ class Products(Resource):
         products_file = request.files["products_csv"]
         products_file_object = products_file.read()
         if not DepotManager._default_depot:
-            DepotManager.configure('default', {'depot.storage_path': '/files'})
+            DepotManager.configure(
+                'default',
+                {
+                    'depot.backend': 'depot.io.boto3.S3Storage',
+                    'depot.access_key_id': config.get('AWS_ACCESS_KEY', None),
+                    'depot.secret_access_key': config.get('AWS_SECRET_KEY', None),
+                    'depot.bucket': 'fulfilio-files',
+                    'depot.region_name': 'eu-central-1'
+                }
+            )
         bulk_csv_object = BulkCSVUploadMethods.create_record(dict(csv=products_file_object))
         db.commit()
         send_csv_import_task(bulk_csv_object.id)

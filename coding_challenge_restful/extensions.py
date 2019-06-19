@@ -1,4 +1,6 @@
 from enum import Enum
+
+from boto.s3.connection import S3Connection
 from depot.fields.sqlalchemy import UploadedFileField
 import inflection
 from flask.config import Config

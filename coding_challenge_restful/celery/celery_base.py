@@ -1,9 +1,15 @@
+import os
 from functools import wraps
 
 import celery
 from depot.manager import DepotManager
+from flask import Config
 
 from coding_challenge_restful.extensions import db, AsyncTask
+
+config_name = 'coding_challenge_restful.settings.Config'
+config = Config("")
+config.from_object(config_name)
 
 
 class CeleryBaseTask(celery.Task):
@@ -74,6 +80,14 @@ def task_initializer(fn):
         self.async_task_obj = async_task_obj
         print(fn.__name__)
         if not DepotManager._default_depot:
-            DepotManager.configure('default', {'depot.storage_path': '/files'})
-        return fn(self,   *args, payload=async_task_obj.payload, **kwargs)
+            DepotManager.configure('default', {
+                'depot.backend': 'depot.io.boto3.S3Storage',
+                'depot.access_key_id': config.get('AWS_ACCESS_KEY', None),
+                'depot.secret_access_key': config.get('AWS_SECRET_KEY', None),
+                'depot.bucket': 'fulfilio-files',
+                'depot.region_name': 'eu-central-1'
+            }
+                                   )
+        return fn(self, *args, payload=async_task_obj.payload, **kwargs)
+
     return wrapper
