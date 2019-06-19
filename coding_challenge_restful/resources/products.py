@@ -5,7 +5,6 @@ from werkzeug.exceptions import BadRequest
 
 from coding_challenge_restful.core.filter_params_pagination import create_filter_params
 from coding_challenge_restful.core.import_csv import send_csv_import_task
-from coding_challenge_restful.core.s3 import get_file_from_s3
 from coding_challenge_restful.extensions import db
 from coding_challenge_restful.model_methods.bulk_csv_methods import BulkCSVUploadMethods
 from coding_challenge_restful.model_methods.product_methods import ProductMethods
