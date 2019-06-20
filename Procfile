@@ -1,2 +1,2 @@
 web: gunicorn manage:app
-worker: ./worker_start.sh
+worker: celery worker --app=coding_challenge_restful.celery.celery_worker.celery_app.celery_app -A  coding_challenge_restful.celery.celery_worker.celery_worker_csv_import -l info -c 1 -Ofair -Q products_csv_import &
